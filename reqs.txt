@@ -1,0 +1,5 @@
+Requirements:
+- Create a new todo item
+- List todo items
+- Mark a todo as complete
+- Clear deleted items
