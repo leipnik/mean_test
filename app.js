@@ -1,16 +1,45 @@
-var app = angular.module('todoApp', []);
+var app = angular.module('todoApp', ['ui.router']);
 
+/*
+// configure ui-router angular plugin
+app.config([
+	'$stateProvider',
+	'$urlRouteProvider',
+	function ($stateProvider, $urlRouteProvider) {
+
+		$stateProvider
+		.state('home', {
+			url: '/home',
+			templateUrl: '/home.html',
+			controiller: 'MainCtrl'
+		});
+
+		$urlRouteProvider.otherwise('home'); // for unspecified routes
+
+	}]);
+*/
+
+// create a factory for our todo items
+app.factory('items', [function() {
+	var o = {
+		items: [
+		{title:'item 1', done:false, createdOn: new Date()},
+		{title:'item 2', done:true, createdOn: new Date()},
+		{title:'item 3', done:false, createdOn: new Date()},
+		{title:'item 4', done:false, createdOn: new Date()},
+		{title:'item 5', done:false, createdOn: new Date()}
+		]
+	};
+	return o;
+}]);
+
+// the main controller to modify the todo items
 app.controller('MainCtrl', [
 	'$scope',
-	function ($scope) {
-		$scope.test = 'MEAN Todo List';
-		$scope.items = [
-			{title:'item 1', done:false, createdOn: new Date()},
-			{title:'item 2', done:true, createdOn: new Date()},
-			{title:'item 3', done:false, createdOn: new Date()},
-			{title:'item 4', done:false, createdOn: new Date()},
-			{title:'item 5', done:false, createdOn: new Date()}
-		];
+	'items',
+	function ($scope, items) {
+		$scope.test = 'Vic\'s MEAN Todo List';
+		$scope.items = items.items;
 		$scope.addItem = function() {
 			// don't add blanks
 			if ($scope.title && $scope.title !== '') {
@@ -30,4 +59,5 @@ app.controller('MainCtrl', [
 		$scope.editItem = function(index) {
 			$scope.items[index].title = item.title;
 		};
-}]);
+	}]);
+
