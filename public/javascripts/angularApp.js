@@ -26,10 +26,8 @@ app.factory('TodoItemsService', [ function() {
 		this.title = title;
 		this.done = done;
 		this.createdOn = createdOn;
-		this.id = TodoItem.lastId++;
 	}
-	TodoItem.lastId = 0;
-
+	
 	var serviceInstance = {
 		items: [ 
 			new TodoItem('take out the garbage', false, new Date()),
