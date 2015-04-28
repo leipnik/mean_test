@@ -1,63 +1,86 @@
 var app = angular.module('todoApp', ['ui.router']);
 
-/*
+
 // configure ui-router angular plugin
 app.config([
 	'$stateProvider',
-	'$urlRouteProvider',
-	function ($stateProvider, $urlRouteProvider) {
+	'$urlRouterProvider',
+	function ($stateProvider, $urlRouterProvider) {
 
 		$stateProvider
-		.state('home', {
-			url: '/home',
-			templateUrl: '/home.html',
-			controiller: 'MainCtrl'
-		});
+			.state('home', {
+				url: '/home',
+				templateUrl: '/home.html',
+				controller: 'MainCtrl'
+			});
 
-		$urlRouteProvider.otherwise('home'); // for unspecified routes
+		$urlRouterProvider.otherwise('home'); // for unspecified routes
 
 	}]);
-*/
 
-// create a factory for our todo items
-app.factory('items', [function() {
-	var o = {
-		items: [
-		{title:'item 1', done:false, createdOn: new Date()},
-		{title:'item 2', done:true, createdOn: new Date()},
-		{title:'item 3', done:false, createdOn: new Date()},
-		{title:'item 4', done:false, createdOn: new Date()},
-		{title:'item 5', done:false, createdOn: new Date()}
-		]
+// TodoItem Service
+app.factory('TodoItemsService', [ function() {
+	// TodoItem class
+	function TodoItem(title, done, createdOn) {
+		// Public properties
+		this.title = title;
+		this.done = done;
+		this.createdOn = createdOn;
+		this.id = TodoItem.lastId++;
+	}
+	TodoItem.lastId = 0;
+
+	var serviceInstance = {
+		items: [ 
+			new TodoItem('take out the garbage', false, new Date()),
+			new TodoItem('clean garage', false, new Date())
+		],
+		list: function() {
+			return serviceInstance.items;
+		},
+		addItem: function(title) {
+			// don't add blanks
+			if (title && title !== '') {
+				serviceInstance.items.push(new TodoItem(title, false, new Date()));
+				return true; // added
+			} else {
+				return false; // didn't add
+			}
+		},
+		saveItem: function(item) {
+			// TODO: update DB
+			//serviceInstance.items[serviceInstance.items.indexOf(item)].title;
+		},
+		deleteItemByIndex: function(itemIndex) {
+			serviceInstance.items.splice(itemIndex, 1);
+		},
+		toggleItem: function(item) {
+			item.done = !item.done;
+		}	
 	};
-	return o;
+		
+
+	return serviceInstance;
 }]);
 
 // the main controller to modify the todo items
 app.controller('MainCtrl', [
 	'$scope',
-	'items',
-	function ($scope, items) {
-		$scope.test = 'Vic\'s MEAN Todo List';
-		$scope.items = items.items;
+	'TodoItemsService',
+
+	function ($scope, TodoItemsService) {
+
+				$scope.test = 'Vic\'s MEAN Todo List';
+		$scope.items = TodoItemsService.list();
 		$scope.addItem = function() {
 			// don't add blanks
 			if ($scope.title && $scope.title !== '') {
-				$scope.items.push({title:$scope.title, done:false, createdOn: new Date()});
-				$scope.title = ''; // clear it after
+				if (TodoItemsService.addItem($scope.title)) {
+					$scope.title = ''; // clear it after, if added
+				}
 			}
 		};
-		$scope.doneItem = function(index) {
-			$scope.items[index].done = true;
-		};
-		$scope.removeItem = function(index) {
-			$scope.items.splice(index, 1);
-		};
-		$scope.undoneItem = function(index) {
-			$scope.items[index].done = false;
-		};
-		$scope.editItem = function(index) {
-			$scope.items[index].title = item.title;
-		};
+		$scope.toggleItem = TodoItemsService.toggleItem;
+		$scope.saveItem = TodoItemsService.saveItem;
+		$scope.deleteItemByIndex = TodoItemsService.deleteItemByIndex;
 	}]);
-

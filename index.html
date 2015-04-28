@@ -10,8 +10,9 @@
 <body ng-app="todoApp" ng-controller="MainCtrl">
 
 	<div class="row">
-		<div class="col-md-6 col-md-offset-3">
-			<div class="page-header">
+		<div class="col-sm-8 col-sm-offset-2">
+
+			<div class="page-header text-center">
 				<h1>{{test}}</h1>
 			</div>
 
@@ -30,27 +31,39 @@
 
 				<ul class="list-group">
 					<li class="list-group-item clearfix task" 
-					ng-repeat="item in items | orderBy : '-createdOn'"
+					ng-repeat="item in items | orderBy : item : -createdOn"
 					ng-class="{disabled: item.done}">
 
-					<p class="lead">{{item.title}}</p>
+					<span class="pull-left">
+						<input type="checkbox" class="form-control" ng-model="item.done"></input>
+					</span>
+
+					<form>
+						<input class="edit form-control input-lg" ng-trim="false" ng-model="item.title" ng-blur="saveItem($index, item.title)"></input>
+					</form>
 
 					<span class="pull-right">
+						<button class="btn btn-primary btn-xs" ng-show="!item.done"><span class="glyphicon glyphicon-ok" 
+							ng-click="toggleItem(item)"></span></button>
 
-						<button class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil" 
-							ng-click="editItem($index)"></span></button>
+							<button class="btn btn-primary btn-xs" ng-show="item.done"><span class="glyphicon glyphicon-repeat" 
+								ng-click="toggleItem(item)"></span></button>
 
-							<button class="btn btn-primary btn-xs" ng-show="!item.done"><span class="glyphicon glyphicon-ok" 
-								ng-click="doneItem($index)"></span></button>
+								<button class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove" 
+									ng-click="deleteItemByIndex($index)"></span></button>
 
-								<button class="btn btn-primary btn-xs" ng-show="item.done"><span class="glyphicon glyphicon-repeat" 
-									ng-click="undoneItem($index)"></span></button>
+								</span>
 
-									<button class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove" 
-										ng-click="removeItem($index)"></span></button>
+					<!--
+					<p class="lead">{{item.title}}</p>
 
-						</span>
+					
+
+
+							
 					</li>
+				-->
+
 				</ul>
 			</div>
 		</div>
