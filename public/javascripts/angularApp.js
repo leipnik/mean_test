@@ -6,6 +6,7 @@ app.config([
 	'$stateProvider',
 	'$urlRouterProvider',
 	function ($stateProvider, $urlRouterProvider) {
+		'use strict';
 
 		$stateProvider
 			.state('home', {
@@ -20,6 +21,8 @@ app.config([
 
 // TodoItem Service
 app.factory('TodoItemsService', [ '$http', function($http) {
+	'use strict';
+
 	// TodoItem class
 	function TodoItem(title, done, createdOn) {
 		// Public properties
@@ -57,11 +60,7 @@ app.factory('TodoItemsService', [ '$http', function($http) {
 			$http.post('/todos/' + item._id + '/delete', item).success(function(data) {
 				serviceInstance.items.splice(itemIndex,1);
 			});
-		},
-		toggleItem: function(item) {
-			item.done = !item.done;
-			saveItem(item);
-		}	
+		}
 	};
 		
 
@@ -72,8 +71,8 @@ app.factory('TodoItemsService', [ '$http', function($http) {
 app.controller('MainCtrl', [
 	'$scope',
 	'TodoItemsService',
-
 	function ($scope, TodoItemsService) {
+		'use strict';
 
 				$scope.test = 'Vic\'s MEAN Todo List';
 		$scope.items = TodoItemsService.list();
@@ -84,7 +83,6 @@ app.controller('MainCtrl', [
 				$scope.title = ''; // clear it after, if added
 			}
 		};
-		$scope.toggleItem = TodoItemsService.toggleItem;
 		$scope.saveItem = TodoItemsService.saveItem;
 		$scope.deleteItemByIndex = TodoItemsService.deleteItemByIndex;
 	}]);

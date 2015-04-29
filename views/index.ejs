@@ -27,34 +27,20 @@
 						</div>
 					</form>
 				</div>
-				<hr/>
+				
+				<div class="row" ng-repeat="item in items | orderBy : item : -createdOn" ng-class="{disabled: item.done}">
 
-				<ul class="list-group">
-					<li class="list-group-item clearfix task" 
-					ng-repeat="item in items | orderBy : item : -createdOn"
-					ng-class="{disabled: item.done}">
-
-					<span class="pull-left">
-						<input type="checkbox" class="form-control" ng-model="item.done"></input>
+				<div class="input-group input-group-lg">
+					<span class="input-group-addon">
+						<input type="checkbox" class="toggle" ng-model="item.done" ng-click="saveItem(item)"></input>
 					</span>
-
 					<form>
 						<input class="edit form-control input-lg" ng-trim="false" ng-model="item.title" ng-blur="saveItem(item)"></input>
 					</form>
-
-					<span class="pull-right">
-						<button class="btn btn-primary btn-xs" ng-show="!item.done"><span class="glyphicon glyphicon-ok" 
-							ng-click="toggleItem(item)"></span></button>
-
-							<button class="btn btn-primary btn-xs" ng-show="item.done"><span class="glyphicon glyphicon-repeat" 
-								ng-click="toggleItem(item)"></span></button>
-
-								<button class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove" 
-									ng-click="deleteItemByIndex($index)"></span></button>
-
-								</span>
-				</ul>
+					<span class="input-group-btn">
+						<button class="btn btn-default btn-lg destroy" ng-click="deleteItemByIndex($index)"><i class="glyphicon glyphicon-remove"></i></button>
+					</span>				
+				</div>
 			</div>
-		</div>
 	</body>
 </html>
