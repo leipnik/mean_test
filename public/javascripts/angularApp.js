@@ -1,5 +1,6 @@
-var app = angular.module('todoApp', ['ui.router']);
+'use strict'
 
+var app = angular.module('todoApp', ['ngMaterial', 'ui.router', 'ngMdIcons']);
 
 // configure ui-router angular plugin
 app.config([
@@ -21,7 +22,6 @@ app.config([
 
 // TodoItem Service
 app.factory('TodoItemsService', [ '$http', function($http) {
-	'use strict';
 
 	// TodoItem class
 	function TodoItem(title, done, createdOn) {
@@ -67,14 +67,39 @@ app.factory('TodoItemsService', [ '$http', function($http) {
 	return serviceInstance;
 }]);
 
+app.factory('Dialog', ['$mdDialog', function DialogFactory ($mdDialog) {
+  return {
+    open: function (url, ctrl, locals) {
+      return $mdDialog.show({
+        templateUrl: url,
+        controller: ctrl,
+        locals: {
+          items: locals
+        }
+      });
+    },
+  }
+}]);
+
+app.controller('DialogCtrl', ['$scope', '$mdDialog', function ($scope, $mdDialog) {
+  $scope.hide = function() {
+		$mdDialog.hide();
+	};
+	$scope.cancel = function() {
+		$mdDialog.cancel();
+	};
+	$scope.answer = function(answer) {
+	  $mdDialog.hide();
+	}
+}])
+
 // the main controller to modify the todo items
 app.controller('MainCtrl', [
 	'$scope',
 	'TodoItemsService',
-	function ($scope, TodoItemsService) {
-		'use strict';
-
-				$scope.test = 'Vic\'s MEAN Todo List';
+	'Dialog',
+	function ($scope, TodoItemsService, Dialog) {
+		$scope.test = 'Vic\'s MEAN Todo List';
 		$scope.items = TodoItemsService.list();
 		$scope.addItem = function() {
 			// don't add blanks
@@ -85,4 +110,11 @@ app.controller('MainCtrl', [
 		};
 		$scope.saveItem = TodoItemsService.saveItem;
 		$scope.deleteItemByIndex = TodoItemsService.deleteItemByIndex;
+
+		$scope.openDialog = function() {
+			var url = '/templates/dialogTemplate.html',
+			ctrl = 'DialogCtrl',
+			locals = []
+			Dialog.open(url, ctrl, locals);
+		}
 	}]);
