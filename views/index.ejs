@@ -7,6 +7,8 @@
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.10/angular.min.js"></script>
 	<script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.10/angular-ui-router.js"></script>
 
+	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.10/angular-touch.js"></script>
+
 	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/0.8.3/angular-material.min.css">
 	<script src="//cdn.jsdelivr.net/angular-material-icons/0.4.0/angular-material-icons.min.js"></script> 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=RobotoDraft:300,400,500,700,400italic">
@@ -25,35 +27,30 @@
 
    <form ng-submit="addItem()">
    		<md-input-container>
-	      <label>Add Item</label>
+	      <label>New Item</label>
 	      <md-input ng-model="title">
 	    </md-input-container>
 
    		<md-input-container>
-   			<md-button type="submit">Add Task</md-button>
+   			<md-button type="submit">Add Item</md-button>
    		</md-input-container>
-
-   		<md-button ng-click="openDialog()">Test</md-button>
 
 	</form>
 	</md-content>
  	
-  <div layout="row" ng-repeat="item in items | orderBy : item : -createdOn" ng-class="{disabled: item.done}" >
+  <div layout layout-sm="column" ng-repeat="item in items | orderBy : item : -createdOn" ng-class="{disabled: item.done}" >
 
   	<md-input-container flex=5>
     	<md-checkbox ng-model="item.done" aria-label="item.title"></md-checkbox>
     </md-input-container>
-
     <md-input-container flex>
     	<md-input ng-model="item.title" ng-trim="false" ng-blur="saveItem(item)"></md-input>
     </md-input-container>
-
-
     <md-input-container flex=5>
     	<md-button ng-click="deleteItemByIndex($index)">
     		<ng-md-icon icon="delete" />
 		</md-button>
-	</md-input-container flex>
+	</md-input-container>
 
   </div>
 
@@ -70,41 +67,4 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angular_material/0.8.3/angular-material.min.js"></script>
   </body>
 
-<!--
-<body ng-controller="MainCtrl">
-
-	<div class="row">
-		<div class="col-sm-8 col-sm-offset-2">
-
-			<div class="page-header text-center">
-				<h1>{{test}}</h1>
-			</div>
-
-			<div class="form">
-				<form ng-submit="addItem()">
-					<div class="input-group">
-						<input ng-model="title" type="text" class="form-control">
-						<span class="input-group-btn">
-							<button type="submit" class="btn btn-default" type="button">
-								<span class="glyphicon glyphicon-plus"></span> Add Task</button>
-							</span>
-						</div>
-					</form>
-				</div>
-				
-				<div class="row" ng-repeat="item in items | orderBy : item : -createdOn" ng-class="{disabled: item.done}">
-
-				<div class="input-group input-group-lg">
-					<span class="input-group-addon">
-						<input type="checkbox" class="toggle" ng-model="item.done" ng-click="saveItem(item)"></input>
-					</span>
-					<form>
-						<input class="edit form-control input-lg" ng-trim="false" ng-model="item.title" ng-blur="saveItem(item)"></input>
-					</form>
-					<span class="input-group-btn">
-						<button class="btn btn-default btn-lg destroy" ng-click="deleteItemByIndex($index)"><i class="glyphicon glyphicon-remove"></i></button>
-					</span>				
-				</div>
-			</div>
-	</body>-->
 </html>
